@@ -1,10 +1,11 @@
+
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split ,KFold
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score , confusion_matrix , classification_report , ConfusionMatrixDisplay
 import matplotlib.pyplot as plt 
-
+import joblib
 
 def header(step , message):
     border = "="*70
@@ -97,7 +98,7 @@ def splitData(data):
     x_train , x_test , y_train , y_test = train_test_split(
         X ,
         Y ,
-        test_size=0.10,
+        test_size=0.2,
         random_state=42
     )
 
@@ -123,20 +124,38 @@ def trainData(x_train , y_train):
     return model
 
 '''
-step 6 : Test the model and calculate Accuracy
+step 6 : Save the Model
+'''
+def preserveModel(model , filename):
+    header(6,"Save the Model")
+    preserved_model = joblib.dump(model , filename)
+    print("Model Saved Successfully")
+    return preserved_model
+
+'''
+step 7 : Load the Model
+'''
+def loadModel(filename):
+    header(7 , "Load the Model")
+    loadModel = joblib.load(filename)
+    print("Model Loaded Successfully")
+    return loadModel
+
+'''
+step 8 : Test the model and calculate Accuracy
 '''
 def testModel(model,x_test , y_test):
-    header(6,"\Test the Model Performance")
+    header(8,"\Test the Model Performance")
     y_pred = model.predict(x_test)
 
     print("Testing Complete")
     return y_pred
 
 '''
-Step 7 : Calculate Accuracy Score , Display Classification Report , confusion Matrix
+Step 9 : Calculate Accuracy Score , Display Classification Report , confusion Matrix
 '''
 def EvaluateModel(y_test , y_pred):
-    header(7,"\Model Evaluation")
+    header(9,"\Model Evaluation")
     accuracy = accuracy_score(y_test , y_pred)
     print(f"\nModel Accuracy = {accuracy*100:.2f}")
 
@@ -148,11 +167,11 @@ def EvaluateModel(y_test , y_pred):
     print(cm)
 
 '''
-step 8 : Graph
+step 10 : Graph
 '''
 
 def Graph(data , y_test , y_pred):
-    header(8,"Graphs")
+    header(10,"Graphs")
     data['fraud_flag'].value_counts().plot(kind='bar')
 
     plt.show()
@@ -180,13 +199,20 @@ def main():
 
     model = trainData(x_train , y_train)
 
-    #step 6 : Test the model and calculate Accuracy
-    y_pred = testModel(model , x_test , y_test)
+    #step 6 : Preserve the model
+    filename = "Bank_Fraude_Detection2.pkl"
+    preserveModel(model , filename)
 
-    #step 7 : Calaculate Accuracy Score , Showing Classification Report , confusion matrix
+    #step 7 : Load the model
+    load_model = loadModel(filename)
+
+    #step 8 : Test the model
+    y_pred = testModel(load_model , x_test , y_test)
+
+    #step 9 : Calaculate Accuracy Score , Showing Classification Report , confusion matrix
     EvaluateModel(y_test , y_pred)
 
-    #step 8 : Graph
+    #step 10 : Graph
 
     Graph(data , y_test , y_pred)
 
