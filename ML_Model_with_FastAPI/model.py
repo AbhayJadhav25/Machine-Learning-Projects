@@ -92,8 +92,7 @@ pipeline.fit(x_train , y_train)
 
 y_pred = pipeline.predict(x_test)
 
+print(accuracy_score(y_test , y_pred))
 pickle_model_path = 'model.pkl'
-with open('pickle_model_path' , 'wb') as f:
+with open(pickle_model_path , 'wb') as f:
     pickle.dump(pipeline , f)
-
-    
