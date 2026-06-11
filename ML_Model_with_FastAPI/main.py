@@ -19,7 +19,10 @@ class UserInput(BaseModel):
     income_lpa : Annotated[float , Field(... , gt = 0 , description='Annual income of the user')]
     smoker : Annotated[bool , Field(... , description='is user a smoker?')]
     city : Annotated[str ,Field(description='The city user belongs to') ]
-    occuption :Annotated[Literal[ 'retired',     'freelancer',  'student', 'government_job','business_owner',     'unemployed',    'private_job'] ,Field(description='Occuption of the user') ]
+    occupation :Annotated[ Literal[
+            "retired", "freelancer", "student", "government_job",
+            "business_owner", "unemployed", "private_job"
+        ] ,Field(description='Occuption of the user') ]
 
     @computed_field
     @property
@@ -78,7 +81,7 @@ def predict_premium(data : UserInput):
         'lifestyle_risk' : data.lifestyle_risk , 
         'city_tier' : data.city_tier , 
         'income_lpa' : data.income_lpa ,
-        'occupation' : data.occuption
+        'occupation' : data.occupation
 
     }])
 
